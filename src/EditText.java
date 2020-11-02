@@ -1,5 +1,6 @@
 
 import java.awt.FileDialog;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /*
@@ -29,6 +31,8 @@ public class EditText extends javax.swing.JFrame {
     String filename = "Untitled";
     public EditText() {
         initComponents();
+        JList lstFont = new javax.swing.JList(
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
     }
 
     /**
@@ -273,9 +277,15 @@ public class EditText extends javax.swing.JFrame {
     private void jMenuFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFontActionPerformed
      FontWindow frame = new FontWindow();
      frame.setVisible(true);
-     frame.setAlwaysOnTop(true);
-     frame.setResizable(false);
-     frame.setLocationByPlatform(true);     
+     frame.setAlwaysOnTop(true);  
+    frame.setLocationByPlatform(true);    
+     /*FontChooser fd = new JFontChooser(this,TextArea.getFont());
+        fd.show();
+        if(fd.getReturnStatus() == fd.RET_OK){
+               TextArea.setFont(fd.getFont());
+        }
+        fd.dispose();
+     */
     }//GEN-LAST:event_jMenuFontActionPerformed
 
     /**
