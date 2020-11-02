@@ -55,6 +55,7 @@ public class EditText extends javax.swing.JFrame {
         jMenuNew = new javax.swing.JMenuItem();
         jMenuExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuFont = new javax.swing.JMenuItem();
 
@@ -131,6 +132,16 @@ public class EditText extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem2.setText("Select All");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Format");
@@ -278,15 +289,12 @@ public class EditText extends javax.swing.JFrame {
      FontWindow frame = new FontWindow();
      frame.setVisible(true);
      frame.setAlwaysOnTop(true);  
-    frame.setLocationByPlatform(true);    
-     /*FontChooser fd = new JFontChooser(this,TextArea.getFont());
-        fd.show();
-        if(fd.getReturnStatus() == fd.RET_OK){
-               TextArea.setFont(fd.getFont());
-        }
-        fd.dispose();
-     */
+     frame.setLocationByPlatform(true);       
     }//GEN-LAST:event_jMenuFontActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        TextArea.selectAll();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -330,6 +338,7 @@ public class EditText extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuExit;
     private javax.swing.JMenuItem jMenuFont;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuNew;
     private javax.swing.JMenuItem jMenuOpen;
     private javax.swing.JMenuItem jMenuSave;
