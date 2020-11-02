@@ -1,6 +1,11 @@
-
-import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
+import javax.swing.DefaultListModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -12,13 +17,19 @@ import java.awt.Font;
  *
  * @author User
  */
-public class FontWindow extends javax.swing.JFrame {
+public final class FontWindow extends javax.swing.JFrame {
 
     /**
      * Creates new form FontWindow
      */
-    public FontWindow() {
+    
+    private String fontName = "Arial";
+    private int fontStyle = 0;
+    private int fontSize = 10;
+    
+    public FontWindow() {       
         initComponents();
+        displayFontList();
     }
 
     /**
@@ -33,21 +44,24 @@ public class FontWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         fontEdit = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        font_list = new javax.swing.JList<>();
         fontStyleText = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
         jLabel3 = new javax.swing.JLabel();
-        fontSize = new javax.swing.JTextField();
+        Font_Size = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList3 = new javax.swing.JList<>();
         previewPanel = new javax.swing.JPanel();
         sampleText = new javax.swing.JLabel();
+        font_window_ok_button = new javax.swing.JButton();
+        font_window_cancel_button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Font");
         setAlwaysOnTop(true);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -56,34 +70,34 @@ public class FontWindow extends javax.swing.JFrame {
 
         jLabel1.setText("Font:");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        font_list.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "MS Serif", "MS Sans Serif", "Small Fonts", "Marlett", "Arial", "Arabic Transparent", "Arial Baltic", "Arial CE", "Arial CYR", "Arial Greek" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jList1.setSelectedIndex(0);
-        jList1.addAncestorListener(new javax.swing.event.AncestorListener() {
+        font_list.setSelectedIndex(0);
+        font_list.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-                jList1AncestorMoved(evt);
+                font_listAncestorMoved(evt);
             }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        jList1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        font_list.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-                jList1CaretPositionChanged(evt);
+                font_listCaretPositionChanged(evt);
             }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
-        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+        font_list.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                jList1ValueChanged(evt);
+                font_listValueChanged(evt);
             }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(font_list);
 
         jLabel2.setText("Font style:");
 
@@ -103,9 +117,9 @@ public class FontWindow extends javax.swing.JFrame {
 
         jLabel3.setText("Size:");
 
-        fontSize.addKeyListener(new java.awt.event.KeyAdapter() {
+        Font_Size.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                fontSizeKeyTyped(evt);
+                Font_SizeKeyTyped(evt);
             }
         });
 
@@ -143,8 +157,12 @@ public class FontWindow extends javax.swing.JFrame {
             previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(previewPanelLayout.createSequentialGroup()
                 .addComponent(sampleText)
-                .addGap(0, 93, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        font_window_ok_button.setText("OK");
+
+        font_window_cancel_button.setText("Cancel");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -153,24 +171,31 @@ public class FontWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(font_window_ok_button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(font_window_cancel_button))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(fontEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(fontStyleText)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3)
-                            .addComponent(fontSize)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(fontEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel1))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(fontStyleText)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel3)
+                                    .addComponent(Font_Size)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))))
+                        .addGap(0, 1, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -185,66 +210,113 @@ public class FontWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fontEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fontStyleText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Font_Size, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(previewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(previewPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(font_window_ok_button)
+                    .addComponent(font_window_cancel_button))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jList1AncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jList1AncestorMoved
+    private void font_listAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_font_listAncestorMoved
        
-    }//GEN-LAST:event_jList1AncestorMoved
+    }//GEN-LAST:event_font_listAncestorMoved
 
-    private void jList1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jList1CaretPositionChanged
+    private void font_listCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_font_listCaretPositionChanged
         
-    }//GEN-LAST:event_jList1CaretPositionChanged
+    }//GEN-LAST:event_font_listCaretPositionChanged
 
-    private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
-      changedValue();
-    }//GEN-LAST:event_jList1ValueChanged
+    private void font_listValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_font_listValueChanged
+        changedFont();
+        setFont();
+    }//GEN-LAST:event_font_listValueChanged
 
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
-        changedValue();
+        changedFontStyle();
+        setFont();
     }//GEN-LAST:event_jList2ValueChanged
-
+    public void displayFontList() {
+        
+     DefaultListModel listModel;
+     listModel = new DefaultListModel();
+     
+      String fonts[] = GraphicsEnvironment
+              .getLocalGraphicsEnvironment()
+              .getAvailableFontFamilyNames();       
+        for (String font : fonts) {
+            listModel.addElement(font);
+        }
+        font_list.setModel(listModel);
+    }
     private void jList3ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList3ValueChanged
-       changedValue();
+       changedFontSize();
+       setFont();
     }//GEN-LAST:event_jList3ValueChanged
 
-    private void fontSizeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fontSizeKeyTyped
+    private void Font_SizeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Font_SizeKeyTyped
         char enter = evt.getKeyChar();
         if(!(Character.isDigit(enter))){
             evt.consume();
         }
-    }//GEN-LAST:event_fontSizeKeyTyped
+    }//GEN-LAST:event_Font_SizeKeyTyped
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-   
+        
     }//GEN-LAST:event_formWindowActivated
 
     
-    private void changedValue() {
-        String selectedFont = jList1.getSelectedValue();
-        fontEdit.setText(selectedFont);
-        
-        String selectedStyle = jList2.getSelectedValue();
-        fontStyleText.setText(selectedStyle);
-        
-        int selectedSize = Integer.parseInt(jList3.getSelectedValue()); 
-        fontSize.setText(String.valueOf(selectedSize));
-        
-        sampleText.setFont(new Font(selectedFont, Font.BOLD, selectedSize));
-    
+    private void changedFont() {       
+        this.fontName = font_list.getSelectedValue();       
+        fontEdit.setText(this.fontName);    
     }
+    
+    private void changedFontStyle() {
+        this.fontStyle = jList2.getSelectedIndex();
+        fontStyleText.setText(jList2.getSelectedValue());
+    }
+    
+    private void changedFontSize () {
+        this.fontSize = Integer.parseInt(jList3.getSelectedValue()); 
+        Font_Size.setText(String.valueOf(this.fontSize));
+        //bold = 1 italic = 2 plain = 0                     
+    }
+    
+    private void setFont() {
+        sampleText.setFont(new Font(
+                this.fontName,
+                this.fontStyle,
+                this.fontSize));      
+    }
+    
+    
+    
+    public void saveProperties(String font, String style, int size) {
+    try {                  
+        //create a properties file
+        Properties props = new Properties();
+        props.setProperty("FontName", font);
+        props.setProperty("FontStyle", style);
+       // props.setProperty("FontSize", size);
+        File f = new File("YOUR_TARGET_FILE_PATH");
+        OutputStream out = new FileOutputStream( f );
+        //If you wish to make some comments 
+        props.store(out, "User properties");
+    }
+    catch (IOException e ) {
+        
+    }
+}
+    
     /**
      * @param args the command line arguments
      */
@@ -281,13 +353,15 @@ public class FontWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Font_Size;
     private javax.swing.JTextField fontEdit;
-    private javax.swing.JTextField fontSize;
     private javax.swing.JTextField fontStyleText;
+    private javax.swing.JList<String> font_list;
+    private javax.swing.JButton font_window_cancel_button;
+    private javax.swing.JButton font_window_ok_button;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JList<String> jList3;
     private javax.swing.JScrollPane jScrollPane1;
