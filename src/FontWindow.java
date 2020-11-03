@@ -1,3 +1,4 @@
+
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -12,13 +13,11 @@ import javax.swing.DefaultListModel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author User
  */
-public final class FontWindow extends javax.swing.JFrame {
-
+public class FontWindow extends javax.swing.JFrame {  
     /**
      * Creates new form FontWindow
      */
@@ -26,8 +25,8 @@ public final class FontWindow extends javax.swing.JFrame {
     private String fontName = "Arial";
     private int fontStyle = 0;
     private int fontSize = 10;
-    
-    public FontWindow() {       
+
+    public FontWindow() {
         initComponents();
         displayFontList();
     }
@@ -161,8 +160,18 @@ public final class FontWindow extends javax.swing.JFrame {
         );
 
         font_window_ok_button.setText("OK");
+        font_window_ok_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                font_window_ok_buttonActionPerformed(evt);
+            }
+        });
 
         font_window_cancel_button.setText("Cancel");
+        font_window_cancel_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                font_window_cancel_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,11 +238,11 @@ public final class FontWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void font_listAncestorMoved(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_font_listAncestorMoved
-       
+
     }//GEN-LAST:event_font_listAncestorMoved
 
     private void font_listCaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_font_listCaretPositionChanged
-        
+
     }//GEN-LAST:event_font_listCaretPositionChanged
 
     private void font_listValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_font_listValueChanged
@@ -245,78 +254,79 @@ public final class FontWindow extends javax.swing.JFrame {
         changedFontStyle();
         setFont();
     }//GEN-LAST:event_jList2ValueChanged
-    public void displayFontList() {
-        
-     DefaultListModel listModel;
-     listModel = new DefaultListModel();
-     
-      String fonts[] = GraphicsEnvironment
-              .getLocalGraphicsEnvironment()
-              .getAvailableFontFamilyNames();       
+    private void displayFontList() {
+
+        DefaultListModel listModel;
+        listModel = new DefaultListModel();
+
+        String fonts[] = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getAvailableFontFamilyNames();
         for (String font : fonts) {
             listModel.addElement(font);
         }
         font_list.setModel(listModel);
     }
     private void jList3ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList3ValueChanged
-       changedFontSize();
-       setFont();
+        changedFontSize();
+        setFont();
     }//GEN-LAST:event_jList3ValueChanged
 
     private void Font_SizeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Font_SizeKeyTyped
         char enter = evt.getKeyChar();
-        if(!(Character.isDigit(enter))){
+        if (!(Character.isDigit(enter))) {
             evt.consume();
         }
     }//GEN-LAST:event_Font_SizeKeyTyped
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        
+
     }//GEN-LAST:event_formWindowActivated
 
-    
-    private void changedFont() {       
-        this.fontName = font_list.getSelectedValue();       
-        fontEdit.setText(this.fontName);    
+    private void font_window_ok_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_font_window_ok_buttonActionPerformed
+        saveProperties();
+        this.dispose();
+    }//GEN-LAST:event_font_window_ok_buttonActionPerformed
+
+    private void font_window_cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_font_window_cancel_buttonActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_font_window_cancel_buttonActionPerformed
+
+    private void changedFont() {
+        this.fontName = font_list.getSelectedValue();
+        fontEdit.setText(this.fontName);
     }
-    
+
     private void changedFontStyle() {
         this.fontStyle = jList2.getSelectedIndex();
         fontStyleText.setText(jList2.getSelectedValue());
     }
-    
-    private void changedFontSize () {
-        this.fontSize = Integer.parseInt(jList3.getSelectedValue()); 
+
+    private void changedFontSize() {
+        this.fontSize = Integer.parseInt(jList3.getSelectedValue());
         Font_Size.setText(String.valueOf(this.fontSize));
         //bold = 1 italic = 2 plain = 0                     
     }
-    
+
     private void setFont() {
         sampleText.setFont(new Font(
                 this.fontName,
                 this.fontStyle,
-                this.fontSize));      
+                this.fontSize));
     }
-    
-    
-    
-    public void saveProperties(String font, String style, int size) {
-    try {                  
-        //create a properties file
-        Properties props = new Properties();
-        props.setProperty("FontName", font);
-        props.setProperty("FontStyle", style);
-       // props.setProperty("FontSize", size);
-        File f = new File("YOUR_TARGET_FILE_PATH");
-        OutputStream out = new FileOutputStream( f );
-        //If you wish to make some comments 
-        props.store(out, "User properties");
+
+    public void saveProperties() {
+        try(OutputStream output = new FileOutputStream("config.properties") ){
+            Properties props = new Properties();
+            props.setProperty("FontName", this.fontName);
+            props.setProperty("FontStyle", String.valueOf(this.fontStyle));
+            props.setProperty("FontSize", String.valueOf(this.fontSize));           
+            props.store(output, "config.properties");
+        } catch (Exception e) {
+          System.out.println("error:" + e);
+        }
     }
-    catch (IOException e ) {
-        
-    }
-}
-    
+
     /**
      * @param args the command line arguments
      */
@@ -346,6 +356,7 @@ public final class FontWindow extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new FontWindow().setVisible(true);
             }
@@ -370,4 +381,6 @@ public final class FontWindow extends javax.swing.JFrame {
     private javax.swing.JPanel previewPanel;
     private javax.swing.JLabel sampleText;
     // End of variables declaration//GEN-END:variables
+
+
 }

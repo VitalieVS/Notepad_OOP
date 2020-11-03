@@ -1,13 +1,15 @@
 
 import java.awt.FileDialog;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.Properties;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -17,7 +19,6 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author User
@@ -27,10 +28,16 @@ public class EditText extends javax.swing.JFrame {
     /**
      * Creates new form EditText
      */
-    
+    private String fontName = "Arial";
+    private int fontStyle = 0;
+    private int fontSize = 10;
+
     String filename = "Untitled";
+
     public EditText() {
         initComponents();
+        getProperties();
+        setFont();
         JList lstFont = new javax.swing.JList(
                 GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames());
     }
@@ -162,7 +169,7 @@ public class EditText extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,123 +180,135 @@ public class EditText extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       filename = "Untitled";
-       TextArea.setText("");
-       setTitle(filename + " - Notepad");
+        filename = "Untitled";
+        TextArea.setText("");
+        setTitle(filename + " - Notepad");
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenActionPerformed
         FileDialog fileDialog;
         fileDialog = new FileDialog(this, "Open File", FileDialog.LOAD);
         fileDialog.setVisible(true);
-        
+
         if (fileDialog.getFile() != null) {
             filename = fileDialog.getDirectory() + fileDialog.getFile();
-            setTitle(fileDialog.getFile() + " - Notepad");           
+            setTitle(fileDialog.getFile() + " - Notepad");
         }
-        
+
         try {
             BufferedReader reader;
             reader = new BufferedReader(new FileReader(filename));
             StringBuilder sb = new StringBuilder();
-            
+
             String line;
-            
+
             while ((line = reader.readLine()) != null) {
-              sb.append(line).append("\n");
-              TextArea.setText(sb.toString());
+                sb.append(line).append("\n");
+                TextArea.setText(sb.toString());
             }
             reader.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("File not found!");
         }
     }//GEN-LAST:event_jMenuOpenActionPerformed
 
+    private void getProperties() {
+        try (InputStream input = new FileInputStream("config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            this.fontName = prop.getProperty("FontName");
+            this.fontStyle = Integer.parseInt(prop.getProperty("FontStyle"));
+            this.fontSize = Integer.parseInt(prop.getProperty("FontSize"));
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("error:" + e);
+        }
+    }
     private void jMenuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewActionPerformed
         MessageFormat header = new MessageFormat("Printing");
-        
+
         MessageFormat footer = new MessageFormat("Page ({0, number, integer}");
-        
+
         try {
-           TextArea.print(header, footer);
-        }
-        catch (java.awt.print.PrinterException e)
-        {
+            TextArea.print(header, footer);
+        } catch (java.awt.print.PrinterException e) {
             System.err.format("No printer found", e.getMessage());
         }
     }//GEN-LAST:event_jMenuNewActionPerformed
 
     private void saveAs(boolean value) {
-       FileDialog fileDialog;
-       fileDialog = new FileDialog(this, "Save File", FileDialog.SAVE);
-       fileDialog.setVisible(value);
-       
-       if (fileDialog.getFile() != null) {
-           filename = fileDialog.getDirectory() + fileDialog.getFile();
-           setTitle(filename);       
-       }
-       try {
-           try (FileWriter fileWriter = new FileWriter(filename)) {
-               fileWriter.write(TextArea.getText());
-               setTitle(filename);       
-               fileWriter.close();
-           }
-       } catch (IOException e) {
-           System.out.println("File not found!");
-       }
+        FileDialog fileDialog;
+        fileDialog = new FileDialog(this, "Save File", FileDialog.SAVE);
+        fileDialog.setVisible(value);
+
+        if (fileDialog.getFile() != null) {
+            filename = fileDialog.getDirectory() + fileDialog.getFile();
+            setTitle(filename);
+        }
+        try {
+            try (FileWriter fileWriter = new FileWriter(filename)) {
+                fileWriter.write(TextArea.getText());
+                setTitle(filename);
+                fileWriter.close();
+            }
+        } catch (IOException e) {
+            System.out.println("File not found!");
+        }
     }
     
+    private void setFont() {
+        TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));       
+    }
+
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
-       saveAs(true);
+        saveAs(true);
     }//GEN-LAST:event_jMenuSaveAsActionPerformed
-   
+
     private void ExitDialog() {
         if (TextArea.getText().length() == 0) {
-        System.exit(0);
+            System.exit(0);
         } else {
             JFrame frame;
             frame = new JFrame("Exit");
-        if (JOptionPane.showConfirmDialog(frame,
-                "Do you want to save changes to " + filename,
-                "Notepad",
-               JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION){          
-            saveAs(true);                 
-        } else {                                 
-          System.exit(0);
-        }
+            if (JOptionPane.showConfirmDialog(frame,
+                    "Do you want to save changes to " + filename,
+                    "Notepad",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
+                saveAs(true);
+            } else {
+                System.exit(0);
+            }
         }
     }
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
-     ExitDialog();      
+        ExitDialog();
     }//GEN-LAST:event_jMenuExitActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-     
+
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-       if (TextArea.getText().length() > 0) {
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
-        ExitDialog();           
-       } else {
-           ExitDialog();
-       }      
+        if (TextArea.getText().length() > 0) {
+            setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            ExitDialog();
+        } else {
+            ExitDialog();
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private void jMenuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveActionPerformed
-       if ("Untitled".equals(filename)) {
-           saveAs(true);
-       } else {
-           saveAs(false);
-       }
+        if ("Untitled".equals(filename)) {
+            saveAs(true);
+        } else {
+            saveAs(false);
+        }
     }//GEN-LAST:event_jMenuSaveActionPerformed
 
     private void jMenuFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFontActionPerformed
-     FontWindow frame = new FontWindow();
-     frame.setVisible(true);
-     frame.setAlwaysOnTop(true);  
-     frame.setLocationByPlatform(true);       
+        FontWindow frame = new FontWindow();
+        frame.setVisible(true);
+        frame.setAlwaysOnTop(true);
+        //frame.setLocationByPlatform(true);       
     }//GEN-LAST:event_jMenuFontActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
