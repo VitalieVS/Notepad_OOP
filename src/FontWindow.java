@@ -1,9 +1,7 @@
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 import javax.swing.DefaultListModel;
@@ -250,6 +248,18 @@ public class FontWindow extends javax.swing.JFrame {
         setFont();
     }//GEN-LAST:event_font_listValueChanged
 
+    public String getFontName() {
+        return this.fontName;
+    }
+    
+    public int getFontStyle() {
+        return this.fontStyle;
+    }    
+    
+    public int getFontSize() {
+        return this.fontSize;
+    }
+    
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
         changedFontStyle();
         setFont();

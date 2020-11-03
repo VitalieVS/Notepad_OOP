@@ -31,8 +31,10 @@ public class EditText extends javax.swing.JFrame {
     private String fontName = "Arial";
     private int fontStyle = 0;
     private int fontSize = 10;
-
+    private boolean flag = false;
     String filename = "Untitled";
+
+    FontWindow fontWindow = new FontWindow();
 
     public EditText() {
         initComponents();
@@ -69,6 +71,9 @@ public class EditText extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Untitled - Notepad");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowClosed(java.awt.event.WindowEvent evt) {
                 formWindowClosed(evt);
             }
@@ -254,9 +259,16 @@ public class EditText extends javax.swing.JFrame {
             System.out.println("File not found!");
         }
     }
-    
+
     private void setFont() {
-        TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));       
+        if (!flag) {
+            TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));
+        } else {
+            this.fontName = fontWindow.getFontName();
+            this.fontStyle = fontWindow.getFontStyle();
+            this.fontSize = fontWindow.getFontSize();
+            TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));
+        }
     }
 
     private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
@@ -305,15 +317,18 @@ public class EditText extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuSaveActionPerformed
 
     private void jMenuFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFontActionPerformed
-        FontWindow frame = new FontWindow();
-        frame.setVisible(true);
-        frame.setAlwaysOnTop(true);
-        //frame.setLocationByPlatform(true);       
+        flag = true;
+        fontWindow.setVisible(true);
+        fontWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_jMenuFontActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         TextArea.selectAll();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        setFont();
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
