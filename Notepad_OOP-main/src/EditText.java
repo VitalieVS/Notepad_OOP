@@ -293,7 +293,6 @@ public class EditText extends javax.swing.JFrame {
     }
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
         ExitDialog();
-        //work
     }//GEN-LAST:event_jMenuExitActionPerformed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
