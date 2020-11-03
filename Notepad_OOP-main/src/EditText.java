@@ -268,6 +268,9 @@ public class EditText extends javax.swing.JFrame {
             this.fontStyle = fontWindow.getFontStyle();
             this.fontSize = fontWindow.getFontSize();
             TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));
+            
+            //does it wokr?
+            
         }
     }
 
