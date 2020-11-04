@@ -35,6 +35,7 @@ public class EditText extends javax.swing.JFrame {
     String filename = "Untitled";
 
     FontWindow fontWindow = new FontWindow();
+    FindWindow findWindow = new FindWindow();
 
     public EditText() {
         initComponents();
@@ -65,6 +66,7 @@ public class EditText extends javax.swing.JFrame {
         jMenuExit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuFind = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuFont = new javax.swing.JMenuItem();
 
@@ -154,6 +156,15 @@ public class EditText extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem2);
 
+        jMenuFind.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuFind.setText("Find...");
+        jMenuFind.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuFindActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuFind);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Format");
@@ -174,11 +185,11 @@ public class EditText extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
         );
 
         pack();
@@ -330,6 +341,11 @@ public class EditText extends javax.swing.JFrame {
         setFont();
     }//GEN-LAST:event_formWindowActivated
 
+    private void jMenuFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFindActionPerformed
+        findWindow.setVisible(true);
+        findWindow.setAlwaysOnTop(true);
+    }//GEN-LAST:event_jMenuFindActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -370,6 +386,7 @@ public class EditText extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuExit;
+    private javax.swing.JMenuItem jMenuFind;
     private javax.swing.JMenuItem jMenuFont;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
