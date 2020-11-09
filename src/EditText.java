@@ -156,7 +156,6 @@ public class EditText extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem2);
 
-        jMenuFind.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         jMenuFind.setText("Find...");
         jMenuFind.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -185,11 +184,11 @@ public class EditText extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
         );
 
         pack();
@@ -330,7 +329,7 @@ public class EditText extends javax.swing.JFrame {
     private void jMenuFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFontActionPerformed
         flag = true;
         fontWindow.setVisible(true);
-        fontWindow.setAlwaysOnTop(true);
+        //fontWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_jMenuFontActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -343,7 +342,6 @@ public class EditText extends javax.swing.JFrame {
 
     private void jMenuFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFindActionPerformed
         findWindow.setVisible(true);
-        findWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_jMenuFindActionPerformed
 
     /**
@@ -380,7 +378,7 @@ public class EditText extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea TextArea;
+    public static javax.swing.JTextArea TextArea;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
