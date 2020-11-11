@@ -70,7 +70,7 @@ public class EditText extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuFont = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Untitled - Notepad");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -188,44 +188,11 @@ public class EditText extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        filename = "Untitled";
-        TextArea.setText("");
-        setTitle(filename + " - Notepad");
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenActionPerformed
-        FileDialog fileDialog;
-        fileDialog = new FileDialog(this, "Open File", FileDialog.LOAD);
-        fileDialog.setVisible(true);
-
-        if (fileDialog.getFile() != null) {
-            filename = fileDialog.getDirectory() + fileDialog.getFile();
-            setTitle(fileDialog.getFile() + " - Notepad");
-        }
-
-        try {
-            BufferedReader reader;
-            reader = new BufferedReader(new FileReader(filename));
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
-                TextArea.setText(sb.toString());
-            }
-            reader.close();
-        } catch (IOException e) {
-            System.out.println("File not found!");
-        }
-    }//GEN-LAST:event_jMenuOpenActionPerformed
 
     private void getProperties() {
         try (InputStream input = new FileInputStream("config.properties")) {
@@ -238,18 +205,6 @@ public class EditText extends javax.swing.JFrame {
             System.out.println("error:" + e);
         }
     }
-    private void jMenuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewActionPerformed
-        MessageFormat header = new MessageFormat("Printing");
-
-        MessageFormat footer = new MessageFormat("Page ({0, number, integer}");
-
-        try {
-            TextArea.print(header, footer);
-        } catch (java.awt.print.PrinterException e) {
-            System.err.format("No printer found", e.getMessage());
-        }
-    }//GEN-LAST:event_jMenuNewActionPerformed
-
     private void saveAs(boolean value) {
         FileDialog fileDialog;
         fileDialog = new FileDialog(this, "Save File", FileDialog.SAVE);
@@ -272,7 +227,8 @@ public class EditText extends javax.swing.JFrame {
 
     private void setFont() {
         if (!flag) {
-            TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));
+            TextArea.setFont(new Font(
+                    this.fontName, this.fontStyle, this.fontSize));
         } else {
             this.fontName = fontWindow.getFontName();
             this.fontStyle = fontWindow.getFontStyle();
@@ -280,10 +236,6 @@ public class EditText extends javax.swing.JFrame {
             TextArea.setFont(new Font(this.fontName, this.fontStyle, this.fontSize));
         }
     }
-
-    private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
-        saveAs(true);
-    }//GEN-LAST:event_jMenuSaveAsActionPerformed
 
     private void ExitDialog() {
         if (TextArea.getText().length() == 0) {
@@ -301,10 +253,6 @@ public class EditText extends javax.swing.JFrame {
             }
         }
     }
-    private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
-        ExitDialog();
-    }//GEN-LAST:event_jMenuExitActionPerformed
-
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
 
     }//GEN-LAST:event_formWindowClosed
@@ -318,18 +266,9 @@ public class EditText extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void jMenuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveActionPerformed
-        if ("Untitled".equals(filename)) {
-            saveAs(true);
-        } else {
-            saveAs(false);
-        }
-    }//GEN-LAST:event_jMenuSaveActionPerformed
-
     private void jMenuFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFontActionPerformed
         flag = true;
         fontWindow.setVisible(true);
-        //fontWindow.setAlwaysOnTop(true);
     }//GEN-LAST:event_jMenuFontActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -343,6 +282,67 @@ public class EditText extends javax.swing.JFrame {
     private void jMenuFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFindActionPerformed
         findWindow.setVisible(true);
     }//GEN-LAST:event_jMenuFindActionPerformed
+
+    private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
+        ExitDialog();
+    }//GEN-LAST:event_jMenuExitActionPerformed
+
+    private void jMenuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewActionPerformed
+        MessageFormat header = new MessageFormat("Printing");
+
+        MessageFormat footer = new MessageFormat("Page ({0, number, integer}");
+
+        try {
+            TextArea.print(header, footer);
+        } catch (java.awt.print.PrinterException e) {
+            System.err.format("No printer found", e.getMessage());
+        }
+    }//GEN-LAST:event_jMenuNewActionPerformed
+
+    private void jMenuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveAsActionPerformed
+        saveAs(true);
+    }//GEN-LAST:event_jMenuSaveAsActionPerformed
+
+    private void jMenuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuSaveActionPerformed
+        if ("Untitled".equals(filename)) {
+            saveAs(true);
+        } else {
+            saveAs(false);
+        }
+    }//GEN-LAST:event_jMenuSaveActionPerformed
+
+    private void jMenuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuOpenActionPerformed
+        FileDialog fileDialog;
+        fileDialog = new FileDialog(this, "Open File", FileDialog.LOAD);
+        fileDialog.setVisible(true);
+
+        if (fileDialog.getFile() != null) {
+            filename = fileDialog.getDirectory() + fileDialog.getFile();
+            setTitle(fileDialog.getFile() + " - Notepad");
+        }
+        
+        try {
+            BufferedReader reader;
+            reader = new BufferedReader(new FileReader(filename));
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+                TextArea.setText(sb.toString());
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("File not found!");
+        }
+    }//GEN-LAST:event_jMenuOpenActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        filename = "Untitled";
+        TextArea.setText("");
+        setTitle(filename + " - Notepad");
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
